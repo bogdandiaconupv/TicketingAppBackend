@@ -4,8 +4,6 @@ import com.ticketingapp.auth.model.*;
 import com.ticketingapp.auth.repository.UserRepository;
 import com.ticketingapp.config.JWTService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +14,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +63,7 @@ public class UserService {
         return userRepository.findByEmail(jwtService.extractUsername(token)).orElse(null);
     }
 
-    public User updateUser(long userId, Map<String, Object> updateFields) {
+    public User updateUser(UUID userId, Map<String, Object> updateFields) {
         Optional<User> existingUserOptional = userRepository.findById(userId);
 
         if (existingUserOptional.isPresent()) {
@@ -78,14 +77,6 @@ public class UserService {
             throw new IllegalArgumentException("User with id: " + userId + "can't be found");
         }
 
-    }
-
-    public boolean checkIfUserAdmin(String authHeader) {
-        String token = authHeader.substring(7);
-        if (!jwtService.extractRole(token).equals("ADMIN")) {
-            return false;
-        }
-        return true;
     }
 
     public List<User> getUserBySearchEmail(String email) {
