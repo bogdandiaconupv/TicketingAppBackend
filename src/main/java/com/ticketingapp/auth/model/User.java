@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 @Entity
-@Table(name ="users")
+@Table(name = "users")
 @Data
 @Builder
 @AllArgsConstructor
@@ -37,20 +37,10 @@ public class User implements UserDetails {
 
     private String profileImageUrl;
 
-//
-//    @ElementCollection( fetch = FetchType.EAGER)
-//    @CollectionTable(name = "completed_lesson", joinColumns = @JoinColumn(name = "user_id"))
-//    private List<Integer> completedLessons = new ArrayList<>();
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority(role.name()));
-//    }
-@Override
-public Collection<? extends GrantedAuthority> getAuthorities() {
-    // Ensure that authorities are granted correctly based on roles
-    return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
-}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
 
 
     @Override
@@ -77,8 +67,6 @@ public Collection<? extends GrantedAuthority> getAuthorities() {
     public boolean isEnabled() {
         return true;
     }
-
-
 
 
 }
