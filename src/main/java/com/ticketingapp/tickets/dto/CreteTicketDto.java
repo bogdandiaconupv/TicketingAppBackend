@@ -1,6 +1,6 @@
 package com.ticketingapp.tickets.dto;
 
-import com.ticketingapp.auth.model.User;
+import com.ticketingapp.auth.dto.UserDto;
 import jakarta.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,5 +18,5 @@ public record CreteTicketDto(
         String mailBody,
 
         @NotNull(message = "CreatedBy cannot be null")
-        User createdBy
+        UserDto createdBy
 ) {}
