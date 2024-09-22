@@ -8,6 +8,7 @@ import com.ticketingapp.shared.dto.PageResponseDto;
 import com.ticketingapp.shared.exeptions.ValueNotFoundForIdException;
 import com.ticketingapp.tickets.dto.CreteTicketDto;
 import com.ticketingapp.tickets.dto.TicketDto;
+import com.ticketingapp.tickets.dto.UpdateTicketDto;
 import com.ticketingapp.tickets.model.Status;
 import com.ticketingapp.tickets.model.Ticket;
 import com.ticketingapp.tickets.repository.TicketRepository;
@@ -43,7 +44,7 @@ public class TicketService {
     }
 
     public TicketDto createTicket(CreteTicketDto dto) {
-        User responsibleUser = userRepository.findById(dto.createdBy().id()).orElseThrow(() -> new ValueNotFoundForIdException("User", dto.createdBy().id()));
+        User user = userRepository.findById(dto.createdBy().id()).orElseThrow(() -> new ValueNotFoundForIdException("User", dto.createdBy().id()));
 
         Ticket ticket = Ticket.builder()
                 .title(dto.title())
@@ -51,7 +52,29 @@ public class TicketService {
                 .trackingNumber(dto.trackingNumber())
                 .phoneNumber(dto.phoneNumber())
                 .mailBody(dto.mailBody())
-                .createdBy(responsibleUser)
+                .createdBy(user)
+                .createdAt(LocalDate.now())
+                .updatedAt(LocalDate.now())
+                .build();
+
+        return ticketToDtoMapper(ticketRepository.save(ticket));
+    }
+
+    public TicketDto updateTicket(UpdateTicketDto dto) {
+        User userOwner = userRepository.findById(dto.createdBy().id()).orElseThrow(() -> new ValueNotFoundForIdException("User", dto.createdBy().id()));
+        User userAssigned = userRepository.findById(dto.assignedTo().id()).orElse(null);
+
+        Ticket ticket = Ticket.builder()
+                .id(dto.id())
+                .title(dto.title())
+                .status(Status.UNRESOLVED)
+                .trackingNumber(dto.trackingNumber())
+                .workOrderNumber(dto.workOrderNumber())
+                .phoneNumber(dto.phoneNumber())
+                .address(dto.address())
+                .mailBody(dto.mailBody())
+                .createdBy(userOwner)
+                .assignedTo(userAssigned)
                 .createdAt(LocalDate.now())
                 .updatedAt(LocalDate.now())
                 .build();

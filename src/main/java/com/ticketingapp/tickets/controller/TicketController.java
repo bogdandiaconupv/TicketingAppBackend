@@ -5,6 +5,7 @@ import com.ticketingapp.shared.dto.PageRequestDto;
 import com.ticketingapp.shared.dto.PageResponseDto;
 import com.ticketingapp.tickets.dto.CreteTicketDto;
 import com.ticketingapp.tickets.dto.TicketDto;
+import com.ticketingapp.tickets.dto.UpdateTicketDto;
 import com.ticketingapp.tickets.service.TicketService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,11 @@ public class TicketController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TicketDto> createTicket(@RequestBody @Validated CreteTicketDto dto){
         return ResponseEntity.ok(ticketService.createTicket(dto));
+    }
+
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<TicketDto> updateTicket(@RequestBody @Validated UpdateTicketDto dto){
+        return ResponseEntity.ok(ticketService.updateTicket(dto));
     }
 }
