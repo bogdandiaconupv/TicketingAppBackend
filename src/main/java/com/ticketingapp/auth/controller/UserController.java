@@ -18,6 +18,13 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/testEmail")
+    public ResponseEntity<?> testEmail(){
+        userService.testEmail();
+        return ResponseEntity.ok(null);
+    }
+
+
     @PostMapping("/auth/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest){
         return ResponseEntity.ok(userService.authenticate(authenticationRequest));

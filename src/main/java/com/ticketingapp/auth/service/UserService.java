@@ -102,7 +102,7 @@ public class UserService {
                 + "CleanCode Team";
 
         // Send the email
-        emailService.sendEmail(user.getEmail(), subject, body);
+       // emailService.sendEmail(user.getEmail(), subject, body);
 
         return new AuthenticationResponse(resetLink);
     }
@@ -120,5 +120,9 @@ public class UserService {
         userRepository.save(user);
 
         return new AuthenticationResponse("Password reseted successfully");
+    }
+
+    public void testEmail() {
+        emailService.fetchUnreadEmails();
     }
 }
