@@ -20,5 +20,6 @@ public record TicketDto (
         UserDto assignedTo,
         UserDto createdBy,
         LocalDate createdAt,
-        LocalDate updatedAt
+        LocalDate updatedAt,
+        boolean active
 ) {}

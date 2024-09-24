@@ -3,7 +3,10 @@ package com.ticketingapp.auth.service;
 import com.ticketingapp.auth.model.*;
 import com.ticketingapp.auth.repository.UserRepository;
 import com.ticketingapp.config.JWTService;
+import com.ticketingapp.shared.dto.SuccessDto;
+import com.ticketingapp.shared.exeptions.ValueNotFoundForIdException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +41,7 @@ public class UserService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(registerRequest.isAdmin() ? Role.ADMIN : Role.USER)
+                .active(true)
                 .build();
 
 
@@ -109,16 +113,20 @@ public class UserService {
 
     public AuthenticationResponse resetUserPassword(String password, String authHeader) {
         String token = authHeader.substring(7);
-        User user = userRepository.findByEmail(jwtService.extractUsername(token)).orElse(null);
-
-        if (user == null) {
-            return new AuthenticationResponse("No user found from token / Token expired");
-        }
+        User user = userRepository.findByEmail(jwtService.extractUsername(token)).orElseThrow(() -> new ValueNotFoundForIdException("User token expired", null ));
 
         String new_password = passwordEncoder.encode(password);
         user.setPassword((new_password));
         userRepository.save(user);
 
         return new AuthenticationResponse("Password reseted successfully");
+    }
+
+    public SuccessDto delete(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ValueNotFoundForIdException("User", userId ));
+        user.setActive(false);
+        userRepository.save(user);
+
+        return new SuccessDto(true);
     }
 }

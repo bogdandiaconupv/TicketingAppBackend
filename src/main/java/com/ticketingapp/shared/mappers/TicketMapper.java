@@ -23,6 +23,7 @@ public class TicketMapper {
                 .createdBy(userToDtoMapper(ticket.getCreatedBy()))
                 .createdAt(ticket.getCreatedAt())
                 .updatedAt(ticket.getUpdatedAt())
+                .active(ticket.isActive())
                 .build();
     }
 

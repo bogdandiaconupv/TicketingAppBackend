@@ -12,5 +12,6 @@ public record UserDto(
         String lastName,
         String email,
         Role role,
-        String profileImageUrl
+        String profileImageUrl,
+        boolean active
 ) {}
