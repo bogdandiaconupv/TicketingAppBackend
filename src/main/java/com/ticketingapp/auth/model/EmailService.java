@@ -17,7 +17,12 @@ import org.json.JSONObject;
 @Component
 public class EmailService {
 
-
+    private final String clientId = "876b7d12-3174-4e7b-9166-48660f554e1b";
+    private final String clientSecret = "FYH8Q~dC8VgLFIj0Xi4-St.E5wmL_RIZ-9MERbQe";
+    private final String tenantId = "common";  // Replace with your tenant ID
+    private final String scope = "https://graph.microsoft.com/.default";
+    private final String tokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
+    private final String username = "bogdanCleanCode@outlook.com";
 
     private String oauth2AccessToken;
     private long tokenExpiryTime;  // Store token expiry time in milliseconds

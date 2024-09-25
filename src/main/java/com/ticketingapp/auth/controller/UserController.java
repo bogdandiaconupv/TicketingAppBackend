@@ -30,7 +30,7 @@ public class UserController {
         return ResponseEntity.ok(userService.authenticate(authenticationRequest));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/auth/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody @Validated RegisterRequest registerRequest){
         return ResponseEntity.ok(userService.register(registerRequest));
