@@ -20,6 +20,7 @@ public class UserController {
 
     @GetMapping("/testEmail")
     public ResponseEntity<?> testEmail(){
+        System.out.println("testedEmail: request in");
         userService.testEmail();
         return ResponseEntity.ok(null);
     }

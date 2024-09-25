@@ -119,6 +119,12 @@
 		<!--		json object-->
 	</dependencies>
 
+	<dependency>
+		<groupId>com.sun.mail</groupId>
+		<artifactId>gimap</artifactId>
+		<version>1.6.2</version>
+	</dependency>
+
 	<build>
 		<plugins>
 			<plugin>
