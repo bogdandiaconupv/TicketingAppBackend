@@ -123,6 +123,6 @@ public class UserService {
     }
 
     public void testEmail() {
-        emailService.fetchUnreadEmails();
+        emailService.sendMail();
     }
 }

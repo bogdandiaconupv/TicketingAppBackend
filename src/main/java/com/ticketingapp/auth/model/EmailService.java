@@ -1,5 +1,10 @@
 package com.ticketingapp.auth.model;
 
+import com.azure.identity.ClientSecretCredential;
+import com.azure.identity.ClientSecretCredentialBuilder;
+import com.microsoft.graph.authentication.TokenCredentialAuthProvider;
+import com.microsoft.graph.models.*;
+import com.microsoft.graph.requests.GraphServiceClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.json.JSONObject;
@@ -9,8 +14,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
+import java.util.List;
 
 @Component
 public class EmailService {
@@ -115,6 +120,80 @@ public class EmailService {
             e.printStackTrace();
             throw new RuntimeException("Failed to fetch emails: " + e.getMessage());
         }
+    }
+
+
+    public void sendMail() {
+        final ClientSecretCredential clientSecretCredential = new ClientSecretCredentialBuilder()
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .tenantId(tenantId)
+                .build();
+
+        List<String> scopes = new ArrayList<>();
+        scopes.add(scope);
+
+        final TokenCredentialAuthProvider tokenCredentialAuthProvider = new TokenCredentialAuthProvider(scopes, clientSecretCredential);
+
+        final GraphServiceClient graphClient =
+                GraphServiceClient
+                        .builder()
+                        .authenticationProvider(tokenCredentialAuthProvider)
+                        .buildClient();
+
+        Message message = new Message();
+        message.subject = "Sample Subject";
+        ItemBody body = new ItemBody();
+        body.contentType = BodyType.HTML;
+
+        body.content = getReportHtml(); //getReportHtml method returns html string
+        message.body = body;
+
+        LinkedList<Recipient> toRecipientsList = new LinkedList<Recipient>();
+        Recipient toRecipients = new Recipient();
+        EmailAddress emailAddress = new EmailAddress();
+        emailAddress.address = "olialexander08@gmail.com";
+        toRecipients.emailAddress = emailAddress;
+        toRecipientsList.add(toRecipients);
+        message.toRecipients = toRecipientsList;
+
+//        LinkedList<Recipient> ccRecipientsList = new LinkedList<Recipient>();
+//        Recipient ccRecipients = new Recipient();
+//        EmailAddress emailAddress1 = new EmailAddress();
+//        emailAddress1.address = "def@outlook.com";
+//        ccRecipients.emailAddress = emailAddress1;
+//        ccRecipientsList.add(ccRecipients);
+//        message.ccRecipients = ccRecipientsList;
+
+//        fromEmailId
+        graphClient.users(username)
+                .sendMail(UserSendMailParameterSet
+                        .newBuilder()
+                        .withMessage(message)
+                        .withSaveToSentItems(true)
+                        .build())
+                .buildRequest()
+                .post();
+    }
+
+    private String getReportHtml() {
+        // Build your HTML content here
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        htmlBuilder.append("<html>");
+        htmlBuilder.append("<head><title>Report</title></head>");
+        htmlBuilder.append("<body>");
+        htmlBuilder.append("<h1>Your Report Title</h1>");
+        htmlBuilder.append("<p>This is a sample report.</p>");
+        htmlBuilder.append("<table border='1'>");
+        htmlBuilder.append("<tr><th>Column 1</th><th>Column 2</th></tr>");
+        htmlBuilder.append("<tr><td>Data 1</td><td>Data 2</td></tr>");
+        htmlBuilder.append("<tr><td>Data 3</td><td>Data 4</td></tr>");
+        htmlBuilder.append("</table>");
+        htmlBuilder.append("</body>");
+        htmlBuilder.append("</html>");
+
+        return htmlBuilder.toString();
     }
 
     /**
