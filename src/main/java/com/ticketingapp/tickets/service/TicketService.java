@@ -43,7 +43,7 @@ public class TicketService {
                 tickets.getTotalElements(),
                 tickets.getNumber(),
                 tickets.getTotalPages()
-                );
+        );
     }
 
     public TicketDto createTicket(CreteTicketDto dto) {
@@ -62,6 +62,11 @@ public class TicketService {
                 .build();
 
         return ticketToDtoMapper(ticketRepository.save(ticket));
+    }
+
+    public TicketDto getTicketById(UUID ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new ValueNotFoundForIdException("Ticket", ticketId));
+        return ticketToDtoMapper(ticket);
     }
 
     public TicketDto updateTicket(UpdateTicketDto dto) {

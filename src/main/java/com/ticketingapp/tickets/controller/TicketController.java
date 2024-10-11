@@ -29,6 +29,14 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getTickets(pageRequestDto));
     }
 
+
+    @GetMapping("/{ticketId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<TicketDto> getTicket(@PathVariable("ticketId") UUID ticketId){
+        return ResponseEntity.ok(ticketService.getTicketById(ticketId));
+    }
+
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TicketDto> createTicket(@RequestBody @Validated CreteTicketDto dto){
