@@ -25,33 +25,33 @@ public class TicketController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<PageResponseDto<List<TicketDto>>> getTickets(PageRequestDto pageRequestDto){
+    public ResponseEntity<PageResponseDto<List<TicketDto>>> getTickets(PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(ticketService.getTickets(pageRequestDto));
     }
 
 
     @GetMapping("/{ticketId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<TicketDto> getTicket(@PathVariable("ticketId") UUID ticketId){
+    public ResponseEntity<TicketDto> getTicket(@PathVariable("ticketId") UUID ticketId) {
         return ResponseEntity.ok(ticketService.getTicketById(ticketId));
     }
 
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TicketDto> createTicket(@RequestBody @Validated CreteTicketDto dto){
+    public ResponseEntity<TicketDto> createTicket(@RequestBody @Validated CreteTicketDto dto) {
         return ResponseEntity.ok(ticketService.createTicket(dto));
     }
 
-    @PutMapping
+    @PutMapping("/{ticketId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TicketDto> updateTicket(@RequestBody @Validated UpdateTicketDto dto){
-        return ResponseEntity.ok(ticketService.updateTicket(dto));
+    public ResponseEntity<TicketDto> updateTicket(@PathVariable("ticketId") UUID ticketId, @RequestBody @Validated UpdateTicketDto dto) {
+        return ResponseEntity.ok(ticketService.updateTicket(ticketId, dto));
     }
 
     @DeleteMapping("/{ticketId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<SuccessDto> deleteTicket(@PathVariable("ticketId") UUID ticketId){
+    public ResponseEntity<SuccessDto> deleteTicket(@PathVariable("ticketId") UUID ticketId) {
         return ResponseEntity.ok(ticketService.deleteTicket(ticketId));
     }
 

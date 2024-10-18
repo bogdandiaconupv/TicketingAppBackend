@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Builder
 public record UpdateTicketDto(
-        UUID id,
         String title,
         Status status,
         long trackingNumber,
