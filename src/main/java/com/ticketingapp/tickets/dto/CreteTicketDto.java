@@ -3,11 +3,17 @@ package com.ticketingapp.tickets.dto;
 import com.ticketingapp.auth.dto.UserDto;
 import jakarta.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
+import com.ticketingapp.tickets.model.Status;
+
 
 @Validated
 public record CreteTicketDto(
         @NotBlank(message = "Title cannot be blank")
         String title,
+
+        Status status,
+
+        String address,
 
         long trackingNumber,
 

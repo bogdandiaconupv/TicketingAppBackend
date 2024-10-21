@@ -14,8 +14,6 @@ import com.ticketingapp.tickets.model.Status;
 import com.ticketingapp.tickets.model.Ticket;
 import com.ticketingapp.tickets.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -48,10 +46,12 @@ public class TicketService {
 
     public TicketDto createTicket(CreteTicketDto dto) {
         User user = userRepository.findById(dto.createdBy().id()).orElseThrow(() -> new ValueNotFoundForIdException("User", dto.createdBy().id()));
+        Status ticketStatus = dto.status() != null ? dto.status() : Status.UNRESOLVED;
 
         Ticket ticket = Ticket.builder()
                 .title(dto.title())
-                .status(Status.UNRESOLVED)
+                .status(ticketStatus)
+                .address(dto.address())
                 .trackingNumber(dto.trackingNumber())
                 .phoneNumber(dto.phoneNumber())
                 .mailBody(dto.mailBody())

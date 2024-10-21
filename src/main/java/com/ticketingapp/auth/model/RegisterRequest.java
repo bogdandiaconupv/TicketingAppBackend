@@ -34,4 +34,8 @@ public class RegisterRequest {
 
     @NotNull(message = "Role is required")
     private boolean admin;
+
+    @Size(min = 2, message = "Address name must be at least 2 characters long")
+    private String address;
+
 }
