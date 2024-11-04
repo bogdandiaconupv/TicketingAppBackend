@@ -69,12 +69,12 @@ public class TicketService {
         return ticketToDtoMapper(ticket);
     }
 
-    public TicketDto updateTicket(UpdateTicketDto dto) {
+    public TicketDto updateTicket(UUID ticketId, UpdateTicketDto dto) {
         User userOwner = userRepository.findById(dto.createdBy().id()).orElseThrow(() -> new ValueNotFoundForIdException("User", dto.createdBy().id()));
         User userAssigned = userRepository.findById(dto.assignedTo().id()).orElse(null);
 
         Ticket ticket = Ticket.builder()
-                .id(dto.id())
+                .id(ticketId)
                 .title(dto.title())
                 .status(Status.UNRESOLVED)
                 .trackingNumber(dto.trackingNumber())
