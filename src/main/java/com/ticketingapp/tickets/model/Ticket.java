@@ -28,11 +28,11 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private long trackingNumber;
+    private String trackingNumber;
 
     private long workOrderNumber;
 
-    private short phoneNumber;
+    private String phoneNumber;
 
     private String address;
 

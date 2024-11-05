@@ -10,9 +10,9 @@ import java.time.LocalDate;
 public record UpdateTicketDto(
         String title,
         Status status,
-        long trackingNumber,
+        String trackingNumber,
         long workOrderNumber,
-        short phoneNumber,
+        String phoneNumber,
         String address,
         String mailBody,
         UserDto assignedTo,

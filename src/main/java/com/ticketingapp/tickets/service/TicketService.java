@@ -76,7 +76,7 @@ public class TicketService {
         Ticket ticket = Ticket.builder()
                 .id(ticketId)
                 .title(dto.title())
-                .status(Status.UNRESOLVED)
+                .status(dto.status())
                 .trackingNumber(dto.trackingNumber())
                 .workOrderNumber(dto.workOrderNumber())
                 .phoneNumber(dto.phoneNumber())
@@ -97,7 +97,6 @@ public class TicketService {
         ticket.setActive(false);
         ticket.setUpdatedAt(LocalDate.now());
 
-        System.out.println(ticket);
         ticketRepository.save(ticket);
 
         return new SuccessDto(true);
