@@ -15,9 +15,9 @@ public record CreteTicketDto(
 
         String address,
 
-        long trackingNumber,
+        String trackingNumber,
 
-        short phoneNumber,
+        String phoneNumber,
 
         @NotBlank(message = "Mail body cannot be blank")
         @Size(max = 1000, message = "Mail body must be less than 1000 characters")
