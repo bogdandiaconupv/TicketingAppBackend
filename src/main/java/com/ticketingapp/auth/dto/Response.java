@@ -1,4 +1,4 @@
-package com.ticketingapp.auth.model;
+package com.ticketingapp.auth.dto;
 
 import lombok.Builder;
 import lombok.Data;

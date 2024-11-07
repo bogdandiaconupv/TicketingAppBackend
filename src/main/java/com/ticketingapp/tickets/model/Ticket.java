@@ -3,6 +3,7 @@ package com.ticketingapp.tickets.model;
 import com.ticketingapp.auth.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -14,6 +15,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Where(
+        clause = "active = true"
+)
 public class Ticket {
     @Id
     @GeneratedValue
@@ -24,11 +28,11 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private long trackingNumber;
+    private String trackingNumber;
 
     private long workOrderNumber;
 
-    private short phoneNumber;
+    private String phoneNumber;
 
     private String address;
 
@@ -46,4 +50,5 @@ public class Ticket {
     private LocalDate createdAt;
 
     private LocalDate updatedAt;
+    private boolean active;
 }

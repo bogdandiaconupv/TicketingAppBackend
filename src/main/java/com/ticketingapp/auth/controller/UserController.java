@@ -1,7 +1,9 @@
 package com.ticketingapp.auth.controller;
 
+import com.ticketingapp.auth.dto.RegisterRequest;
 import com.ticketingapp.auth.model.*;
 import com.ticketingapp.auth.service.UserService;
+import com.ticketingapp.shared.dto.SuccessDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,20 +20,12 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/testEmail")
-    public ResponseEntity<?> testEmail(){
-        System.out.println("testedEmail: request in");
-        userService.testEmail();
-        return ResponseEntity.ok(null);
-    }
-
-
     @PostMapping("/auth/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest){
         return ResponseEntity.ok(userService.authenticate(authenticationRequest));
     }
 
-   // @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/auth/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody @Validated RegisterRequest registerRequest){
         return ResponseEntity.ok(userService.register(registerRequest));
@@ -62,4 +56,11 @@ public class UserController {
         return ResponseEntity.ok(userService.resetUserPassword( requestBody.get("password"), authHeader));
     }
 
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SuccessDto> deleteUser(@PathVariable("userId") UUID userId){
+        return ResponseEntity.ok(userService.delete(userId));
+    }
+
 }
+

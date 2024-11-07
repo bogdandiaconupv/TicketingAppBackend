@@ -5,20 +5,19 @@ import com.ticketingapp.tickets.model.Status;
 import lombok.Builder;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Builder
 public record UpdateTicketDto(
-        UUID id,
         String title,
         Status status,
-        long trackingNumber,
+        String trackingNumber,
         long workOrderNumber,
-        short phoneNumber,
+        String phoneNumber,
         String address,
         String mailBody,
         UserDto assignedTo,
         UserDto createdBy,
         LocalDate createdAt,
-        LocalDate updatedAt
+        LocalDate updatedAt,
+        boolean active
 ) {}

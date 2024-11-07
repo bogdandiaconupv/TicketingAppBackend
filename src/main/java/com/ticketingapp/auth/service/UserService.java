@@ -1,8 +1,11 @@
 package com.ticketingapp.auth.service;
 
+import com.ticketingapp.auth.dto.RegisterRequest;
 import com.ticketingapp.auth.model.*;
 import com.ticketingapp.auth.repository.UserRepository;
 import com.ticketingapp.config.JWTService;
+import com.ticketingapp.shared.dto.SuccessDto;
+import com.ticketingapp.shared.exeptions.ValueNotFoundForIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +41,7 @@ public class UserService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(registerRequest.isAdmin() ? Role.ADMIN : Role.USER)
+                .active(true)
                 .build();
 
 
@@ -102,18 +106,14 @@ public class UserService {
                 + "CleanCode Team";
 
         // Send the email
-       // emailService.sendEmail(user.getEmail(), subject, body);
+        emailService.sendEmail(user.getEmail(), subject, body);
 
         return new AuthenticationResponse(resetLink);
     }
 
     public AuthenticationResponse resetUserPassword(String password, String authHeader) {
         String token = authHeader.substring(7);
-        User user = userRepository.findByEmail(jwtService.extractUsername(token)).orElse(null);
-
-        if (user == null) {
-            return new AuthenticationResponse("No user found from token / Token expired");
-        }
+        User user = userRepository.findByEmail(jwtService.extractUsername(token)).orElseThrow(() -> new ValueNotFoundForIdException("User token expired", null ));
 
         String new_password = passwordEncoder.encode(password);
         user.setPassword((new_password));
@@ -122,7 +122,11 @@ public class UserService {
         return new AuthenticationResponse("Password reseted successfully");
     }
 
-    public void testEmail() {
-        emailService.sendMail();
+    public SuccessDto delete(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ValueNotFoundForIdException("User", userId ));
+        user.setActive(false);
+        userRepository.save(user);
+
+        return new SuccessDto(true);
     }
 }
