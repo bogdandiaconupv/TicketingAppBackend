@@ -19,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final EmailService emailService;
 
     @PostMapping("/auth/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest){
@@ -61,6 +62,11 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SuccessDto> deleteUser(@PathVariable("userId") UUID userId){
         return ResponseEntity.ok(userService.delete(userId));
+    }
+    @GetMapping("/fetchTickets")
+    public ResponseEntity<List<Email>> getEmails() {
+        List<Email> unreadEmails = emailService.fetchUnreadEmails();
+        return ResponseEntity.ok(unreadEmails);
     }
 
 }
