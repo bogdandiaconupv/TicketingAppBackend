@@ -93,11 +93,11 @@ public class UserService {
         String ten_minutes_token = jwtService.generateToken(user, 1000 * 60 * 10);
 
 //        MUST CHANGE
-        String deploy_link = "https://quest.cleancode.ro/reset_CleanCode_password";
-        String local_link = "http://localhost:5173/reset_CleanCode_password";
-        String resetLink = deploy_link + "/" + ten_minutes_token + "/" + user.getId();
+        String deploy_link = "https://quest.cleancode.ro/reset_Ticket_password";
+        String local_link = "http://localhost:5173/reset_Ticket_password";
+        String resetLink = local_link + "/" + ten_minutes_token + "/" + user.getId();
 
-        String subject = "CleanCode Password Reset Request";
+        String subject = "CleanCode TicketingApp Password Reset Request";
         String body = "Dear " + user.getFirstName() + " " + user.getLastName() + ",\n\n"
                 + "You have requested to reset your password. Your one-time link is: \n\n" + resetLink + "\n\n"
                 + "Please use this password to reset your password within the next 10 minutes.\n\n"

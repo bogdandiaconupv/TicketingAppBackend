@@ -56,6 +56,7 @@ public class UserController {
         return ResponseEntity.ok(userService.resetUserPassword( requestBody.get("password"), authHeader));
     }
 
+
     @DeleteMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SuccessDto> deleteUser(@PathVariable("userId") UUID userId){
