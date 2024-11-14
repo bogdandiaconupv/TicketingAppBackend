@@ -28,15 +28,18 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name="tracking_number")
     private long trackingNumber;
 
+    @Column(name="work_order_number")
     private long workOrderNumber;
 
-    private short phoneNumber;
+    @Column(name="phone_number")
+    private String phoneNumber;
 
     private String address;
 
-    @Column(length = 1000)
+    @Column(length = 1000, name= "mail_body")
     private String mailBody;
 
     @ManyToOne
@@ -47,8 +50,11 @@ public class Ticket {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
+    @Column(name = "created_at")
     private LocalDate createdAt;
 
+    @Column(name="updated_at")
     private LocalDate updatedAt;
+
     private boolean active;
 }

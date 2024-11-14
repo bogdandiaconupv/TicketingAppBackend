@@ -12,7 +12,7 @@ public record UpdateTicketDto(
         Status status,
         long trackingNumber,
         long workOrderNumber,
-        short phoneNumber,
+        String phoneNumber,
         String address,
         String mailBody,
         UserDto assignedTo,

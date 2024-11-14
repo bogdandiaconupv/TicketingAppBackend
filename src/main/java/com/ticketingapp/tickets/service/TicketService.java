@@ -44,6 +44,32 @@ public class TicketService {
         );
     }
 
+    public PageResponseDto<List<TicketDto>> getTicketsByFilters(Status status,
+                                                                LocalDate createdAt,
+                                                                LocalDate updatedAt,
+                                                                UUID createdBy,
+                                                                UUID assignedTo,
+                                                                Long trackingNumber,
+                                                                Long workOrderNumber,
+                                                                PageRequestDto pageRequestDto) {
+        Pageable page = pageRequestToDtoMapper(pageRequestDto);
+        Page<Ticket> tickets = ticketRepository.findByFilters(status,
+                createdAt,
+                updatedAt,
+                createdBy, assignedTo,
+                trackingNumber,
+                workOrderNumber,
+                page);
+        System.out.println(tickets);
+
+        return new PageResponseDto<>(
+                ticketsToDtoMapper(tickets.stream().toList()),
+                tickets.getTotalElements(),
+                tickets.getNumber(),
+                tickets.getTotalPages()
+        );
+    }
+
     public TicketDto createTicket(CreteTicketDto dto) {
         User user = userRepository.findById(dto.createdBy().id()).orElseThrow(() -> new ValueNotFoundForIdException("User", dto.createdBy().id()));
         Status ticketStatus = dto.status() != null ? dto.status() : Status.UNRESOLVED;
@@ -97,7 +123,6 @@ public class TicketService {
         ticket.setActive(false);
         ticket.setUpdatedAt(LocalDate.now());
 
-        System.out.println(ticket);
         ticketRepository.save(ticket);
 
         return new SuccessDto(true);
