@@ -2,6 +2,7 @@ package com.ticketingapp.auth.controller;
 
 import com.ticketingapp.auth.dto.RegisterRequest;
 import com.ticketingapp.auth.model.*;
+import com.ticketingapp.auth.service.EmailService;
 import com.ticketingapp.auth.service.UserService;
 import com.ticketingapp.shared.dto.SuccessDto;
 import lombok.RequiredArgsConstructor;

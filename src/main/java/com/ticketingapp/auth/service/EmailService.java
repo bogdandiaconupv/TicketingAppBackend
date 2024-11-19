@@ -1,5 +1,6 @@
-package com.ticketingapp.auth.model;
+package com.ticketingapp.auth.service;
 
+import com.ticketingapp.auth.model.Email;
 import org.springframework.stereotype.Component;
 
 

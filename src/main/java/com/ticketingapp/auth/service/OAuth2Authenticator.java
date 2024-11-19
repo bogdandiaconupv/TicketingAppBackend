@@ -1,4 +1,4 @@
-package com.ticketingapp.auth.model;
+package com.ticketingapp.auth.service;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
