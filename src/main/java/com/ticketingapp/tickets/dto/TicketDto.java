@@ -13,7 +13,7 @@ public record TicketDto (
         String title,
         Status status,
         String trackingNumber,
-        long workOrderNumber,
+        String workOrderNumber,
         String phoneNumber,
         String address,
         String mailBody,

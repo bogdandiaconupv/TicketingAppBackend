@@ -15,7 +15,9 @@ import com.ticketingapp.tickets.model.Ticket;
 import com.ticketingapp.tickets.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,6 +37,54 @@ public class TicketService {
     public PageResponseDto<List<TicketDto>> getTickets(PageRequestDto pageRequestDto) {
         Pageable page = pageRequestToDtoMapper(pageRequestDto);
         Page<Ticket> tickets = ticketRepository.findAll(page);
+
+        return new PageResponseDto<>(
+                ticketsToDtoMapper(tickets.stream().toList()),
+                tickets.getTotalElements(),
+                tickets.getNumber(),
+                tickets.getTotalPages()
+        );
+    }
+
+    public PageResponseDto<List<TicketDto>> findAllWithSorting(String sortColumn, String sortDirection, PageRequestDto pageRequestDto) {
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection.toUpperCase());
+
+        Sort sort = Sort.by(direction, sortColumn);
+        Pageable pageable = PageRequest.of(pageRequestDto.pageNumber(), pageRequestDto.pageSize(), sort);
+        Page<Ticket> tickets = ticketRepository.findAllTickets(pageable);
+
+        return new PageResponseDto<>(
+                ticketsToDtoMapper(tickets.stream().toList()),
+                tickets.getTotalElements(),
+                tickets.getNumber(),
+                tickets.getTotalPages()
+        );
+    }
+
+
+    public PageResponseDto<List<TicketDto>> getTicketsByFilters(Status status,
+                                                                LocalDate createdAtStart,
+                                                                LocalDate createdAtEnd,
+                                                                LocalDate updatedAtStart,
+                                                                LocalDate updatedAtEnd,
+                                                                List<UUID> createdByIds,
+                                                                List<UUID> assignedToIds,
+                                                                String trackingNumber,
+                                                                String workOrderNumber,
+                                                                PageRequestDto pageRequestDto) {
+        Pageable page = pageRequestToDtoMapper(pageRequestDto);
+
+
+        Page<Ticket> tickets = ticketRepository.findByFilters(status,
+                createdAtStart,
+                createdAtEnd,
+                updatedAtStart,
+                updatedAtEnd,
+                createdByIds,
+                assignedToIds,
+                trackingNumber,
+                workOrderNumber,
+                page);
 
         return new PageResponseDto<>(
                 ticketsToDtoMapper(tickets.stream().toList()),
