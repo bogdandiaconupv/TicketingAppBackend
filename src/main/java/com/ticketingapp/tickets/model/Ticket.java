@@ -29,10 +29,10 @@ public class Ticket {
     private Status status;
 
     @Column(name="tracking_number")
-    private long trackingNumber;
+    private String trackingNumber;
 
     @Column(name="work_order_number")
-    private long workOrderNumber;
+    private String workOrderNumber;
 
     @Column(name="phone_number")
     private String phoneNumber;

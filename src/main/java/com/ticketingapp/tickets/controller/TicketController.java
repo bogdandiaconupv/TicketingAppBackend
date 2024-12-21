@@ -13,7 +13,9 @@ import com.ticketingapp.tickets.model.Ticket;
 import com.ticketingapp.tickets.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -46,25 +48,32 @@ public class TicketController {
     @GetMapping("/filtered")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<PageResponseDto<List<TicketDto>>> getFilteredTickets(
-            @RequestParam(value = "status", required = false) Status status,
-            @RequestParam(value = "createdAt", required = false) LocalDate createdAt,
-            @RequestParam(value = "updatedAt", required = false) LocalDate updatedAt,
-            @RequestParam(value = "createdBy", required = false) UUID createdBy,
-            @RequestParam(value = "assignedTo", required = false) UUID assignedTo,
-            @RequestParam(value = "trackingNumber", required = false) Long trackingNumber,
-            @RequestParam(value = "workOrderNumber", required = false) Long workOrderNumber,
-            PageRequestDto pageRequestDto
-    ) {
-        PageResponseDto<List<TicketDto>> tickets = ticketService.getTicketsByFilters(status,
-                createdAt,
-                updatedAt,
-                createdBy, assignedTo,
-                trackingNumber,
-                workOrderNumber,
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate createdAtStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate createdAtEnd,
+//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate updatedAtStart,
+//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate updatedAtEnd,
+            @RequestParam(required = false) List<UUID> createdByIds,
+            @RequestParam(required = false) List<UUID> assignedToIds,
+            @RequestParam(required = false) String trackingNumber,
+            @RequestParam(required = false) String workOrderNumber,
+            PageRequestDto pageRequestDto) {
+        PageResponseDto<List<TicketDto>> tickets = ticketService.getTicketsByFilters(
+                status,
+                createdAtStart, createdAtEnd,
+//                updatedAtStart, updatedAtEnd,
+                createdByIds,  assignedToIds,
+                trackingNumber, workOrderNumber,
                 pageRequestDto);
+        System.out.println("Log "+pageRequestDto);
+        System.out.println("Log "+pageRequestDto);
+        System.out.println("Log "+pageRequestDto);
+        System.out.println("Log "+pageRequestDto);
+        System.out.println("Log "+pageRequestDto);
+        System.out.println("Log "+pageRequestDto);
         return ResponseEntity.ok(tickets);
-
     }
+
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")

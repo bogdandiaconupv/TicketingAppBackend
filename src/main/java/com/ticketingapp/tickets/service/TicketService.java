@@ -44,23 +44,39 @@ public class TicketService {
         );
     }
 
+
+
+
     public PageResponseDto<List<TicketDto>> getTicketsByFilters(Status status,
-                                                                LocalDate createdAt,
-                                                                LocalDate updatedAt,
-                                                                UUID createdBy,
-                                                                UUID assignedTo,
-                                                                Long trackingNumber,
-                                                                Long workOrderNumber,
+                                                                LocalDate createdAtStart,
+                                                                LocalDate createdAtEnd,
+//                                                                LocalDate updatedAtStart,
+//                                                                LocalDate updatedAtEnd,
+                                                                List<UUID> createdByIds,
+                                                                List<UUID> assignedToIds,
+                                                                String trackingNumber,
+                                                                String workOrderNumber,
                                                                 PageRequestDto pageRequestDto) {
         Pageable page = pageRequestToDtoMapper(pageRequestDto);
+
+//        if (createdAtStart == null || createdAtStart.toString().trim().equals("")) {
+//            createdAtStart = null ;
+//        }
+//
+//        if (createdAtEnd == null || createdAtEnd.toString().trim().equals("")) {
+//            createdAtEnd = null;
+//        }
+
         Page<Ticket> tickets = ticketRepository.findByFilters(status,
-                createdAt,
-                updatedAt,
-                createdBy, assignedTo,
+                createdAtStart,
+                createdAtEnd,
+//                updatedAtStart,
+//                updatedAtEnd,
+                createdByIds,
+                assignedToIds,
                 trackingNumber,
                 workOrderNumber,
                 page);
-        System.out.println(tickets);
 
         return new PageResponseDto<>(
                 ticketsToDtoMapper(tickets.stream().toList()),

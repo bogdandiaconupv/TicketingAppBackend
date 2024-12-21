@@ -15,7 +15,7 @@ public record CreteTicketDto(
 
         String address,
 
-        long trackingNumber,
+        String trackingNumber,
 
         String phoneNumber,
 
