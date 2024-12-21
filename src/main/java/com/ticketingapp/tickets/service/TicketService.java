@@ -126,7 +126,7 @@ public class TicketService {
         Ticket ticket = Ticket.builder()
                 .id(ticketId)
                 .title(dto.title())
-                .status(Status.UNRESOLVED)
+                .status(dto.status())
                 .trackingNumber(dto.trackingNumber())
                 .workOrderNumber(dto.workOrderNumber())
                 .phoneNumber(dto.phoneNumber())

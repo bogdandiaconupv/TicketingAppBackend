@@ -1,4 +1,4 @@
-package com.ticketingapp.auth.model;
+package com.ticketingapp.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,8 +34,5 @@ public class RegisterRequest {
 
     @NotNull(message = "Role is required")
     private boolean admin;
-
-    @Size(min = 2, message = "Address name must be at least 2 characters long")
-    private String address;
 
 }

@@ -1,12 +1,12 @@
 package com.ticketingapp.auth.service;
 
+import com.ticketingapp.auth.dto.RegisterRequest;
 import com.ticketingapp.auth.model.*;
 import com.ticketingapp.auth.repository.UserRepository;
 import com.ticketingapp.config.JWTService;
 import com.ticketingapp.shared.dto.SuccessDto;
 import com.ticketingapp.shared.exeptions.ValueNotFoundForIdException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
