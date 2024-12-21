@@ -50,8 +50,8 @@ public class TicketService {
     public PageResponseDto<List<TicketDto>> getTicketsByFilters(Status status,
                                                                 LocalDate createdAtStart,
                                                                 LocalDate createdAtEnd,
-//                                                                LocalDate updatedAtStart,
-//                                                                LocalDate updatedAtEnd,
+                                                                LocalDate updatedAtStart,
+                                                                LocalDate updatedAtEnd,
                                                                 List<UUID> createdByIds,
                                                                 List<UUID> assignedToIds,
                                                                 String trackingNumber,
@@ -59,19 +59,12 @@ public class TicketService {
                                                                 PageRequestDto pageRequestDto) {
         Pageable page = pageRequestToDtoMapper(pageRequestDto);
 
-//        if (createdAtStart == null || createdAtStart.toString().trim().equals("")) {
-//            createdAtStart = null ;
-//        }
-//
-//        if (createdAtEnd == null || createdAtEnd.toString().trim().equals("")) {
-//            createdAtEnd = null;
-//        }
 
         Page<Ticket> tickets = ticketRepository.findByFilters(status,
                 createdAtStart,
                 createdAtEnd,
-//                updatedAtStart,
-//                updatedAtEnd,
+                updatedAtStart,
+                updatedAtEnd,
                 createdByIds,
                 assignedToIds,
                 trackingNumber,

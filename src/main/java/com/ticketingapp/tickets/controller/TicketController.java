@@ -51,8 +51,8 @@ public class TicketController {
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate createdAtStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate createdAtEnd,
-//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate updatedAtStart,
-//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate updatedAtEnd,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate updatedAtStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate updatedAtEnd,
             @RequestParam(required = false) List<UUID> createdByIds,
             @RequestParam(required = false) List<UUID> assignedToIds,
             @RequestParam(required = false) String trackingNumber,
@@ -61,16 +61,11 @@ public class TicketController {
         PageResponseDto<List<TicketDto>> tickets = ticketService.getTicketsByFilters(
                 status,
                 createdAtStart, createdAtEnd,
-//                updatedAtStart, updatedAtEnd,
+                updatedAtStart, updatedAtEnd,
                 createdByIds,  assignedToIds,
                 trackingNumber, workOrderNumber,
                 pageRequestDto);
-        System.out.println("Log "+pageRequestDto);
-        System.out.println("Log "+pageRequestDto);
-        System.out.println("Log "+pageRequestDto);
-        System.out.println("Log "+pageRequestDto);
-        System.out.println("Log "+pageRequestDto);
-        System.out.println("Log "+pageRequestDto);
+
         return ResponseEntity.ok(tickets);
     }
 
