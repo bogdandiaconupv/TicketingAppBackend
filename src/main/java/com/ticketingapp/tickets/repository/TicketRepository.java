@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public interface TicketRepository extends JpaRepository<Ticket, UUID> {
 
+
     @Query("SELECT t FROM Ticket t " +
             "WHERE (:status IS NULL OR :status='undefined' OR t.status = :status) " +
 
@@ -37,5 +38,22 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
                                @Param("workOrderNumber") String workOrderNumber,
                                Pageable pageable);
 
+    @Query("SELECT t FROM Ticket t")
+    Page<Ticket> findAllTickets(Pageable pageable);
 
+
+//    @Query("SELECT t FROM Ticket t " + "ORDER BY t.trackingNumber ASC")
+//    Page<Ticket> orderBytrackingNo(Pageable pageable);
+//
+//    @Query("SELECT t FROM Ticket t " + "ORDER BY t.mailBody ASC")
+//    Page<Ticket> orderByMailBody(Pageable pageable);
+//
+//    @Query("SELECT t FROM Ticket t " + "ORDER BY t.title ASC")
+//    Page<Ticket> orderByTitle(Pageable pageable);
+//
+//    @Query("SELECT t FROM Ticket t " + "ORDER BY t.address ASC")
+//    Page<Ticket> orderByAddress(Pageable pageable);
+//
+//    @Query("SELECT t FROM Ticket t " + "ORDER BY t.createdAt ASC")
+//    Page<Ticket> orderByCreatedAt(Pageable pageable);
 }

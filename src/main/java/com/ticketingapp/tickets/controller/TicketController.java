@@ -37,6 +37,52 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getTickets(pageRequestDto));
     }
 
+//    @GetMapping("/order/status")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public ResponseEntity<PageResponseDto<List<TicketDto>>> orderTicketsByStatus(PageRequestDto pageRequestDto) {
+//        return ResponseEntity.ok(ticketService.orderTicketsByStatus(pageRequestDto));
+//    }
+//
+//    @GetMapping("/order/trackingNo")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public ResponseEntity<PageResponseDto<List<TicketDto>>> orderTicketsByTrackingNo(PageRequestDto pageRequestDto) {
+//        return ResponseEntity.ok(ticketService.orderTicketsByTrackingNo(pageRequestDto));
+//    }
+//
+//    @GetMapping("/order/mailBody")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public ResponseEntity<PageResponseDto<List<TicketDto>>> orderTicketsByMailBody(PageRequestDto pageRequestDto) {
+//        return ResponseEntity.ok(ticketService.orderTicketsByMailBody(pageRequestDto));
+//    }
+//
+//    @GetMapping("/order/title")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public ResponseEntity<PageResponseDto<List<TicketDto>>> orderTicketsByTitle(PageRequestDto pageRequestDto) {
+//        return ResponseEntity.ok(ticketService.orderTicketsByTitle(pageRequestDto));
+//    }
+//
+//    @GetMapping("/order/address")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public ResponseEntity<PageResponseDto<List<TicketDto>>> orderTicketsByAddress(PageRequestDto pageRequestDto) {
+//        return ResponseEntity.ok(ticketService.orderTicketsByAddress(pageRequestDto));
+//    }
+//
+//    @GetMapping("/order/createdAt")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public ResponseEntity<PageResponseDto<List<TicketDto>>> orderTicketsByCreatedAt(PageRequestDto pageRequestDto) {
+//        return ResponseEntity.ok(ticketService.orderTicketsByCreatedAt(pageRequestDto));
+//    }
+
+    @GetMapping("/sort")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<PageResponseDto<List<TicketDto>>> orderTickets(
+            @RequestParam(value = "sortColumn") String sortColumn,
+            @RequestParam(value = "sortDirection") String sortDirection,
+            PageRequestDto pageRequestDto) {
+        return ResponseEntity.ok(ticketService.findAllWithSorting(sortColumn, sortDirection, pageRequestDto));
+    }
+
+
 
     @GetMapping("/{ticketId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -62,7 +108,7 @@ public class TicketController {
                 status,
                 createdAtStart, createdAtEnd,
                 updatedAtStart, updatedAtEnd,
-                createdByIds,  assignedToIds,
+                createdByIds, assignedToIds,
                 trackingNumber, workOrderNumber,
                 pageRequestDto);
 
