@@ -47,16 +47,10 @@ public class TicketService {
     }
 
     public PageResponseDto<List<TicketDto>> findAllWithSorting(String sortColumn, String sortDirection, PageRequestDto pageRequestDto) {
-        // Map the sort direction to Sort.Order.Direction
         Sort.Direction direction = Sort.Direction.fromString(sortDirection.toUpperCase());
 
-        // Build the Sort object dynamically based on the sortColumn and sortDirection
         Sort sort = Sort.by(direction, sortColumn);
-
-        // Convert pageRequestDto to Pageable with the dynamic Sort
         Pageable pageable = PageRequest.of(pageRequestDto.pageNumber(), pageRequestDto.pageSize(), sort);
-
-        // Fetch sorted tickets
         Page<Ticket> tickets = ticketRepository.findAllTickets(pageable);
 
         return new PageResponseDto<>(
@@ -66,78 +60,6 @@ public class TicketService {
                 tickets.getTotalPages()
         );
     }
-//    public PageResponseDto<List<TicketDto>> orderTicketsByStatus(PageRequestDto pageRequestDto) {
-//        Pageable page = pageRequestToDtoMapper(pageRequestDto);
-//        Page<Ticket> tickets = ticketRepository.orderByStatus(page);
-//
-//        return new PageResponseDto<>(
-//                ticketsToDtoMapper(tickets.stream().toList()),
-//                tickets.getTotalElements(),
-//                tickets.getNumber(),
-//                tickets.getTotalPages()
-//        );
-//    }
-//
-//    public PageResponseDto<List<TicketDto>> orderTicketsByTrackingNo(PageRequestDto pageRequestDto) {
-//        Pageable page = pageRequestToDtoMapper(pageRequestDto);
-//        Page<Ticket> tickets = ticketRepository.orderBytrackingNo(page);
-//
-//        return new PageResponseDto<>(
-//                ticketsToDtoMapper(tickets.stream().toList()),
-//                tickets.getTotalElements(),
-//                tickets.getNumber(),
-//                tickets.getTotalPages()
-//        );
-//    }
-//
-//
-//    public PageResponseDto<List<TicketDto>> orderTicketsByMailBody(PageRequestDto pageRequestDto) {
-//        Pageable page = pageRequestToDtoMapper(pageRequestDto);
-//        Page<Ticket> tickets = ticketRepository.orderByMailBody(page);
-//
-//        return new PageResponseDto<>(
-//                ticketsToDtoMapper(tickets.stream().toList()),
-//                tickets.getTotalElements(),
-//                tickets.getNumber(),
-//                tickets.getTotalPages()
-//        );
-//    }
-//
-//    public PageResponseDto<List<TicketDto>> orderTicketsByTitle(PageRequestDto pageRequestDto) {
-//        Pageable page = pageRequestToDtoMapper(pageRequestDto);
-//        Page<Ticket> tickets = ticketRepository.orderByTitle(page);
-//
-//        return new PageResponseDto<>(
-//                ticketsToDtoMapper(tickets.stream().toList()),
-//                tickets.getTotalElements(),
-//                tickets.getNumber(),
-//                tickets.getTotalPages()
-//        );
-//    }
-//
-//    public PageResponseDto<List<TicketDto>> orderTicketsByAddress(PageRequestDto pageRequestDto) {
-//        Pageable page = pageRequestToDtoMapper(pageRequestDto);
-//        Page<Ticket> tickets = ticketRepository.orderByAddress(page);
-//
-//        return new PageResponseDto<>(
-//                ticketsToDtoMapper(tickets.stream().toList()),
-//                tickets.getTotalElements(),
-//                tickets.getNumber(),
-//                tickets.getTotalPages()
-//        );
-//    }
-//
-//    public PageResponseDto<List<TicketDto>> orderTicketsByCreatedAt(PageRequestDto pageRequestDto) {
-//        Pageable page = pageRequestToDtoMapper(pageRequestDto);
-//        Page<Ticket> tickets = ticketRepository.orderByCreatedAt(page);
-//
-//        return new PageResponseDto<>(
-//                ticketsToDtoMapper(tickets.stream().toList()),
-//                tickets.getTotalElements(),
-//                tickets.getNumber(),
-//                tickets.getTotalPages()
-//        );
-//    }
 
 
     public PageResponseDto<List<TicketDto>> getTicketsByFilters(Status status,
