@@ -4,6 +4,7 @@ import com.ticketingapp.auth.dto.RegisterRequest;
 import com.ticketingapp.auth.model.*;
 import com.ticketingapp.auth.service.UserService;
 import com.ticketingapp.shared.dto.SuccessDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +43,8 @@ public class UserController {
     }
 
     @GetMapping("/auth/forgotPassword/{email}")
-    public ResponseEntity<AuthenticationResponse> forgotPasswordRequest(@PathVariable String email ){
-        return ResponseEntity.ok(userService.generateForgotPasswordToken(email));
+    public ResponseEntity<AuthenticationResponse> forgotPasswordRequest(@PathVariable String email, HttpServletRequest httpServletRequest ){
+        return ResponseEntity.ok(userService.generateForgotPasswordToken(email, httpServletRequest));
     }
 
     @PatchMapping("/{userId}")
