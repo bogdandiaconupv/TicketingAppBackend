@@ -38,7 +38,7 @@ public class TicketController {
 
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TicketDto> createTicket(@RequestBody @Validated CreteTicketDto dto) {
         return ResponseEntity.ok(ticketService.createTicket(dto));
     }
