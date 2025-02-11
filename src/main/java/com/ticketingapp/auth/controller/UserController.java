@@ -1,10 +1,12 @@
 package com.ticketingapp.auth.controller;
 
+import com.ticketingapp.auth.dto.EmailDto;
 import com.ticketingapp.auth.dto.RegisterRequest;
 import com.ticketingapp.auth.model.*;
 import com.ticketingapp.auth.service.EmailService;
 import com.ticketingapp.auth.service.UserService;
 import com.ticketingapp.shared.dto.SuccessDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +46,8 @@ public class UserController {
     }
 
     @GetMapping("/auth/forgotPassword/{email}")
-    public ResponseEntity<AuthenticationResponse> forgotPasswordRequest(@PathVariable String email ){
-        return ResponseEntity.ok(userService.generateForgotPasswordToken(email));
+    public ResponseEntity<AuthenticationResponse> forgotPasswordRequest(@PathVariable String email, HttpServletRequest httpServletRequest ){
+        return ResponseEntity.ok(userService.generateForgotPasswordToken(email, httpServletRequest));
     }
 
     @PatchMapping("/{userId}")
@@ -65,9 +67,9 @@ public class UserController {
         return ResponseEntity.ok(userService.delete(userId));
     }
     @GetMapping("/fetchTickets")
-    public ResponseEntity<List<Email>> getEmails() {
-        List<Email> unreadEmails = emailService.fetchUnreadEmails();
-        return ResponseEntity.ok(unreadEmails);
+    public ResponseEntity<List<EmailDto>> getEmails() {
+        List<EmailDto> unreadEmailDtos = emailService.fetchUnreadEmails();
+        return ResponseEntity.ok(unreadEmailDtos);
     }
 
 }

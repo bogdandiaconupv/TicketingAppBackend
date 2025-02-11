@@ -4,7 +4,7 @@ package com.ticketingapp.tickets.controller;
 import com.ticketingapp.shared.dto.PageRequestDto;
 import com.ticketingapp.shared.dto.PageResponseDto;
 import com.ticketingapp.shared.dto.SuccessDto;
-import com.ticketingapp.tickets.dto.CreteTicketDto;
+import com.ticketingapp.tickets.dto.CreateTicketDto;
 import com.ticketingapp.tickets.dto.TicketDto;
 import com.ticketingapp.tickets.dto.UpdateTicketDto;
 import com.ticketingapp.tickets.service.TicketService;
@@ -39,7 +39,7 @@ public class TicketController {
 
     @PostMapping
 //    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TicketDto> createTicket(@RequestBody @Validated CreteTicketDto dto) {
+    public ResponseEntity<TicketDto> createTicket(@RequestBody @Validated CreateTicketDto dto) {
         return ResponseEntity.ok(ticketService.createTicket(dto));
     }
 

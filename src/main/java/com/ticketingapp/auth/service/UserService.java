@@ -6,6 +6,7 @@ import com.ticketingapp.auth.repository.UserRepository;
 import com.ticketingapp.config.JWTService;
 import com.ticketingapp.shared.dto.SuccessDto;
 import com.ticketingapp.shared.exeptions.ValueNotFoundForIdException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -88,14 +89,12 @@ public class UserService {
     }
 
 
-    public AuthenticationResponse generateForgotPasswordToken(String email) {
+    public AuthenticationResponse generateForgotPasswordToken(String email, HttpServletRequest httpServletRequest) {
         var user = userRepository.findByEmail(email).orElseThrow();
         String ten_minutes_token = jwtService.generateToken(user, 1000 * 60 * 10);
 
-//        MUST CHANGE
-        String deploy_link = "https://quest.cleancode.ro/reset_Ticket_password";
-        String local_link = "http://localhost:5173/reset_Ticket_password";
-        String resetLink = local_link + "/" + ten_minutes_token + "/" + user.getId();
+        String origin = httpServletRequest.getHeader("Origin") == null ? "http://localhost:5173" : httpServletRequest.getHeader("Origin") ;
+        String resetLink = origin + "/" + ten_minutes_token + "/" + user.getId();
 
         String subject = "CleanCode TicketingApp Password Reset Request";
         String body = "Dear " + user.getFirstName() + " " + user.getLastName() + ",\n\n"
@@ -105,7 +104,6 @@ public class UserService {
                 + "Sincerely,\n"
                 + "CleanCode Team";
 
-        // Send the email
         emailService.sendEmail(user.getEmail(), subject, body);
 
         return new AuthenticationResponse(resetLink);

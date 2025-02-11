@@ -1,6 +1,7 @@
 package com.ticketingapp.auth.service;
 
-import com.ticketingapp.auth.model.Email;
+import com.ticketingapp.auth.dto.EmailDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
@@ -14,18 +15,39 @@ import java.util.List;
 
 @Component
 public class EmailService {
-    private final String username = "projectcleancode@gmail.com";
-    private final String password = "vfdb xyof uxyc pkiy";
+    private final String username;
+    private final String password;
     private final Properties props;
 
-    public EmailService() {
-        // Setup properties for the SMTP server (Gmail)
+    private final String mailStoreProtocol;
+    private final String mailImapHost;
+    private final String mailImapPort;
+
+    public EmailService(
+            @Value("${MAIL_SMTP_AUTH}") String smtpAuth,
+            @Value("${MAIL_SMTP_STARTTLS_ENABLE}") String starttlsEnable,
+            @Value("${MAIL_SMTP_HOST}") String smtpHost,
+            @Value("${MAIL_SMTP_PORT}") String smtpPort,
+            @Value("${MAIL_SMTP_SSL_TRUST}") String sslTrust,
+            @Value("${EMAIL_SENDER_ADDRESS}") String emailSenderAddress,
+            @Value("${EMAIL_PASSWORD}") String emailPassword,
+            @Value("${MAIL_STORE_PROTOCOL}") String mailStoreProtocol,
+            @Value("${MAIL_IMAP_HOST}") String mailImapHost,
+            @Value("${MAIL_IMAP_PORT}") String mailImapPort
+    ) {
+        this.username = emailSenderAddress;
+        this.password = emailPassword;
+
+        this.mailStoreProtocol = mailStoreProtocol;
+        this.mailImapHost = mailImapHost;
+        this.mailImapPort = mailImapPort;
+
         props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587"); // Use port 587 for TLS
-        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.put("mail.smtp.auth", smtpAuth);
+        props.put("mail.smtp.starttls.enable", starttlsEnable);
+        props.put("mail.smtp.host", smtpHost);
+        props.put("mail.smtp.port", smtpPort);
+        props.put("mail.smtp.ssl.trust", sslTrust);
     }
 
     public void sendEmail(String to, String subject, String body) {
@@ -51,14 +73,13 @@ public class EmailService {
         }
     }
 
-    public List<Email> fetchUnreadEmails() {
-        List<Email> emailList = new ArrayList<>();
+    public List<EmailDto> fetchUnreadEmails() {
+        List<EmailDto> emailDtoList = new ArrayList<>();
         try {
-            // Use IMAP instead of POP3
             Properties properties = new Properties();
-            properties.put("mail.store.protocol", "imaps");
-            properties.put("mail.imap.host", "imap.gmail.com");
-            properties.put("mail.imap.port", "993");
+            properties.put("mail.store.protocol", mailStoreProtocol);
+            properties.put("mail.imap.host", mailImapHost);
+            properties.put("mail.imap.port", mailImapPort);
 
             Session emailSession = Session.getDefaultInstance(properties);
             Store store = emailSession.getStore("imaps");
@@ -72,18 +93,18 @@ public class EmailService {
             System.out.println("Total seen emails: " + messages.length);
 
             for (Message message : messages) {
-                Email email = new Email();
-                email.setFrom(InternetAddress.toString(message.getFrom()));
-                email.setSubject(message.getSubject());
-                email.setReceivedDate(message.getSentDate().toString());
-                email.setSize(message.getSize());
-                email.setFlags(message.getFlags().toString());
-                email.setContentType(message.getContentType());
+                EmailDto emailDto = new EmailDto();
+                emailDto.setFrom(InternetAddress.toString(message.getFrom()));
+                emailDto.setSubject(message.getSubject());
+                emailDto.setReceivedDate(message.getSentDate().toString());
+                emailDto.setSize(message.getSize());
+                emailDto.setFlags(message.getFlags().toString());
+                emailDto.setContentType(message.getContentType());
 
                 // Get email content
                 Object content = message.getContent();
                 if (content instanceof String) {
-                    email.setBody(content.toString());
+                    emailDto.setBody(content.toString());
                 } else if (content instanceof Multipart) {
                     Multipart multipart = (Multipart) content;
                     StringBuilder bodyContent = new StringBuilder();
@@ -93,10 +114,10 @@ public class EmailService {
                             bodyContent.append(part.getContent().toString());
                         }
                     }
-                    email.setBody(bodyContent.toString());
+                    emailDto.setBody(bodyContent.toString());
                 }
 
-                emailList.add(email);
+                emailDtoList.add(emailDto);
             }
 
             emailFolder.close(false);
@@ -105,56 +126,6 @@ public class EmailService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return emailList;
-    }
-
-    /**
-     * Processes unread emails and extracts ticket-related information.
-     * Returns a list of Object arrays, where each array contains:
-     * [title, phoneNumber, address, trackingNumber, mailBody].
-     */
-    public List<Object[]> processUnreadEmailsForTickets() {
-        List<Object[]> ticketDataList = new ArrayList<>();
-        List<Email> unreadEmails = fetchUnreadEmails();
-
-        for (Email email : unreadEmails) {
-            String emailBody = email.getBody();
-
-            // Extract ticket details from the email body
-            String phoneNumber = extractValue(emailBody, "Phone Number:");
-            String address = extractValue(emailBody, "Address:");
-            String trackingNumber = extractValue(emailBody, "Tracking Number:");
-            String problem = extractValue(emailBody, "Problem:");
-
-            // Prepare the data as an Object array
-            Object[] ticketData = new Object[]{
-                    email.getSubject(), // title
-                    phoneNumber,       // phoneNumber
-                    address,           // address
-                    trackingNumber,    // trackingNumber
-                    problem            // mailBody
-            };
-
-            // Add the data to the list
-            ticketDataList.add(ticketData);
-        }
-
-        return ticketDataList;
-    }
-
-    /**
-     * Helper method to extract a value from the email body based on a key.
-     */
-    private String extractValue(String emailBody, String key) {
-        int startIndex = emailBody.indexOf(key);
-        if (startIndex == -1) {
-            return null; // Key not found
-        }
-        startIndex += key.length();
-        int endIndex = emailBody.indexOf("\n", startIndex);
-        if (endIndex == -1) {
-            endIndex = emailBody.length();
-        }
-        return emailBody.substring(startIndex, endIndex).trim();
+        return emailDtoList;
     }
 }

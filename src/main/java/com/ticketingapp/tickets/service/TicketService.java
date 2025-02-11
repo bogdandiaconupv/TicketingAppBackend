@@ -7,7 +7,7 @@ import com.ticketingapp.shared.dto.PageRequestDto;
 import com.ticketingapp.shared.dto.PageResponseDto;
 import com.ticketingapp.shared.dto.SuccessDto;
 import com.ticketingapp.shared.exeptions.ValueNotFoundForIdException;
-import com.ticketingapp.tickets.dto.CreteTicketDto;
+import com.ticketingapp.tickets.dto.CreateTicketDto;
 import com.ticketingapp.tickets.dto.TicketDto;
 import com.ticketingapp.tickets.dto.UpdateTicketDto;
 import com.ticketingapp.tickets.model.Status;
@@ -44,7 +44,7 @@ public class TicketService {
         );
     }
 
-    public TicketDto createTicket(CreteTicketDto dto) {
+    public TicketDto createTicket(CreateTicketDto dto) {
         User user = userRepository.findById(dto.createdBy().id()).orElseThrow(() -> new ValueNotFoundForIdException("User", dto.createdBy().id()));
         Status ticketStatus = dto.status() != null ? dto.status() : Status.UNRESOLVED;
 
