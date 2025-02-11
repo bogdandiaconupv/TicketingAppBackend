@@ -1,7 +1,9 @@
 package com.ticketingapp.auth.controller;
 
+import com.ticketingapp.auth.dto.EmailDto;
 import com.ticketingapp.auth.dto.RegisterRequest;
 import com.ticketingapp.auth.model.*;
+import com.ticketingapp.auth.service.EmailService;
 import com.ticketingapp.auth.service.UserService;
 import com.ticketingapp.shared.dto.SuccessDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final EmailService emailService;
 
     @PostMapping("/auth/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest){
@@ -57,10 +60,16 @@ public class UserController {
         return ResponseEntity.ok(userService.resetUserPassword( requestBody.get("password"), authHeader));
     }
 
+
     @DeleteMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SuccessDto> deleteUser(@PathVariable("userId") UUID userId){
         return ResponseEntity.ok(userService.delete(userId));
+    }
+    @GetMapping("/fetchTickets")
+    public ResponseEntity<List<EmailDto>> getEmails() {
+        List<EmailDto> unreadEmailDtos = emailService.fetchUnreadEmails();
+        return ResponseEntity.ok(unreadEmailDtos);
     }
 
 }

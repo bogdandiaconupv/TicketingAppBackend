@@ -7,7 +7,7 @@ import com.ticketingapp.tickets.model.Status;
 
 
 @Validated
-public record CreteTicketDto(
+public record CreateTicketDto(
         @NotBlank(message = "Title cannot be blank")
         String title,
 

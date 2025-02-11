@@ -96,7 +96,7 @@ public class UserService {
         String origin = httpServletRequest.getHeader("Origin") == null ? "http://localhost:5173" : httpServletRequest.getHeader("Origin") ;
         String resetLink = origin + "/" + ten_minutes_token + "/" + user.getId();
 
-        String subject = "CleanCode Password Reset Request";
+        String subject = "CleanCode TicketingApp Password Reset Request";
         String body = "Dear " + user.getFirstName() + " " + user.getLastName() + ",\n\n"
                 + "You have requested to reset your password. Your one-time link is: \n\n" + resetLink + "\n\n"
                 + "Please use this password to reset your password within the next 10 minutes.\n\n"
