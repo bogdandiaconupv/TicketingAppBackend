@@ -1,0 +1,43 @@
+services:
+  ticketing-app-api:
+    container_name: ticketing-app-api
+    image :  0li2003/ticketing_app:1.0
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - MAIL_SMTP_AUTH=${MAIL_SMTP_AUTH}
+      - MAIL_SMTP_STARTTLS_ENABLE=${MAIL_SMTP_STARTTLS_ENABLE}
+      - MAIL_SMTP_HOST=${MAIL_SMTP_HOST}
+      - MAIL_SMTP_PORT=${MAIL_SMTP_PORT}
+      - MAIL_SMTP_SSL_TRUST=${MAIL_SMTP_SSL_TRUST}
+      - EMAIL_SENDER_ADDRESS=${EMAIL_SENDER_ADDRESS}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+    depends_on:
+      - ticketing-app-db
+    networks:
+      - ticketing_app_network
+
+  ticketing-app-db:
+    image: postgres:latest
+    container_name: ticketing-app-db
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ticketing_app_volume:/var/lib/postgresql/data
+    networks:
+      - ticketing_app_network
+
+networks:
+  ticketing_app_network:
+    driver: bridge
+
+volumes:
+  ticketing_app_volume:
+
